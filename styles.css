@@ -1,0 +1,149 @@
+@import url("http://fonts.cdnfonts.com/css/product-sans");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --color-primary: #292d40;
+  --color-primary-light: #9b9ca4e3;
+
+  --color-secondary: #8553c9;
+
+  --width: 500px;
+}
+
+body {
+  background: var(--color-primary);
+  color: #fff;
+
+  text-align: center;
+  font-family: "Product Sans", sans-serif;
+
+  width: var(--width);
+  margin: 0 auto;
+}
+
+#logo {
+  font-size: 2.5rem;
+  margin: 2rem 0;
+}
+
+#search {
+  position: relative;
+}
+#search input {
+  width: var(--width);
+  padding: 15px 30px;
+
+  border-radius: 50px;
+  border: unset;
+
+  background: #202434;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+  font-size: 1.2rem;
+  color: #fff;
+}
+#search input:focus {
+  outline: none;
+}
+
+#loading {
+  height: 1px;
+  background: var(--color-primary);
+  width: 90%;
+  position: absolute;
+  overflow: hidden;
+  left: 5%;
+}
+#loading.active::before {
+  content: "";
+  display: block;
+  width: 200px;
+  height: 100%;
+  background: var(--color-secondary);
+  position: absolute;
+  left: -200px;
+  animation: loading 2s linear infinite;
+}
+
+@keyframes loading {
+  from {
+    left: -200px;
+  }
+  to {
+    left: 100%;
+  }
+}
+
+#results:not(:empty) {
+  margin: 0.5rem 0;
+  width: 100%;
+  max-height: 50vh;
+  padding: 10px;
+  background: var(--color-primary-light);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+
+  list-style: none;
+  text-align: left;
+
+  overflow-y: scroll;
+  position: absolute;
+}
+#results.hide {
+  display: none;
+}
+
+.search-result {
+  display: flex;
+  align-items: center;
+
+  font-size: 1.2em;
+  cursor: pointer;
+
+  gap: 10px;
+
+  padding: 10px;
+  border-radius: 8px;
+
+  background: transparent;
+
+  transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.search-result:hover {
+  background: #fff;
+  color: var(--color-primary);
+}
+.search-result img {
+  width: 50px;
+  height: 50px;
+  border-radius: 5px;
+}
+
+#song-info {
+  margin: 2rem 0;
+}
+#song-info img {
+  border-radius: 8px;
+}
+#song-info p {
+  color: rgb(205, 205, 205);
+}
+
+#lyrics p {
+  white-space: pre-line;
+  margin-bottom: 10px;
+}
+#lyrics a {
+  color: rgb(205, 205, 205);
+  text-decoration: none;
+}
+[class^="lyric-"] {
+  border-top: 1px solid rgba(255, 255, 255, 0.452);
+  padding: 10px;
+}
