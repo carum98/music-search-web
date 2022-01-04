@@ -93,6 +93,8 @@ body {
 
   overflow-y: scroll;
   position: absolute;
+
+  z-index: 2;
 }
 #results.hide {
   display: none;
@@ -167,6 +169,9 @@ body {
 }
 #song-info p {
   color: rgb(205, 205, 205);
+}
+#song-info audio {
+  margin-top: 1rem;
 }
 
 #lyrics p {

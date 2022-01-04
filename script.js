@@ -82,6 +82,7 @@ const suggestions = (data) => {
     fragment.appendChild(li);
   });
 
+  results.classList.remove("hide");
   results.appendChild(fragment);
 };
 
