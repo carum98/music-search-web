@@ -44,6 +44,8 @@ const fetchSong = async (song_url, lyrics_url) => {
 
   lyrics(data2);
 
+  album(data);
+
   loading.classList.remove("active");
 };
 
@@ -182,6 +184,45 @@ const links = (media) => {
   song.append(section);
 };
 
+const album = async ({ album: { name, url } }) => {
+  const section = document.createElement("section");
+  section.id = "album";
+  section.classList.add("tabContent");
+
+  const h2 = document.createElement("h2");
+  h2.innerHTML = name;
+
+  section.append(h2);
+
+  if (!url) {
+    song.append(section);
+    return;
+  }
+
+  const ul = document.createElement("ul");
+
+  const response = await fetch(`${apiUrl}${url}`);
+  const data = await response.json();
+
+  data.songs.forEach(({ title, song_url, lyrics_url }) => {
+    const li = document.createElement("li");
+    li.classList.add("album-song");
+    li.innerText = title;
+
+    li.addEventListener("click", () => {
+      fetchSong(song_url, lyrics_url);
+
+      song.innerHTML = "";
+    });
+
+    ul.appendChild(li);
+  });
+
+  section.append(ul);
+
+  song.append(section);
+};
+
 const clickTab = (e) => {
   const active = document.querySelector("#tabs button.active");
   active.classList.remove("active");
@@ -206,7 +247,6 @@ const tabs = () => {
   section.innerHTML = `
     <button id="lyrics" onclick="clickTab(this)" class="active">Lyrics</button>
     <button id="album" onclick="clickTab(this)">Album</button>
-    <button id="artist" onclick="clickTab(this)">Artist</button>
   `;
 
   song.append(section);
