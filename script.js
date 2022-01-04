@@ -22,9 +22,9 @@ const fetchSearch = async () => {
   const value = document.querySelector("#search input").value;
 
   const response = await fetch(`${apiUrl}/search?q=${value}`);
-  const { genius, spotify } = await response.json();
+  const data = await response.json();
 
-  suggestions(genius);
+  suggestions(data);
 
   loading.classList.remove("active");
 };
@@ -36,6 +36,8 @@ const fetchSong = async (song_url, lyrics_url) => {
   const data = await response.json();
 
   songInformation(data);
+
+  tabs();
 
   const response2 = await fetch(`${apiUrl}${lyrics_url}`);
   const data2 = await response2.json();
@@ -81,7 +83,13 @@ const suggestions = (data) => {
   results.appendChild(fragment);
 };
 
-const songInformation = ({ artist, title, thumbnail_url }) => {
+const songInformation = ({
+  artist,
+  title,
+  thumbnail_url,
+  preview_url,
+  media,
+}) => {
   const section = document.createElement("section");
   section.id = "song-info";
 
@@ -96,6 +104,21 @@ const songInformation = ({ artist, title, thumbnail_url }) => {
 
   section.append(img, h2, p);
 
+  if (preview_url) {
+    const audio = document.createElement("audio");
+    audio.setAttribute("controls", "controls");
+    const source = document.createElement("source");
+    source.src = preview_url;
+    source.type = "audio/mpeg";
+    audio.append(source);
+
+    section.append(audio);
+  }
+
+  if (media) {
+    links(media);
+  }
+
   song.append(section);
 };
 
@@ -104,6 +127,7 @@ const lyrics = (data) => {
 
   const section = document.createElement("section");
   section.id = "lyrics";
+  section.classList.add("tabContent", "active");
 
   for (const key in data) {
     const div = document.createElement("div");
@@ -125,6 +149,66 @@ const lyrics = (data) => {
   }
 
   section.append(fragment);
+  song.append(section);
+};
+
+const links = (media) => {
+  const section = document.createElement("section");
+  section.id = "media";
+
+  const fragment = document.createDocumentFragment();
+
+  media.forEach(({ url, provider }) => {
+    const a = document.createElement("a");
+    a.href = url;
+    a.setAttribute("target", "_blank");
+
+    const img = document.createElement("img");
+
+    if (provider === "youtube") {
+      img.src = "./assets/youtube.svg";
+    } else if (provider === "spotify") {
+      img.src = "./assets/spotify.svg";
+    } else if (provider === "soundcloud") {
+      img.src = "./assets/soundcloud.svg";
+    }
+
+    a.append(img);
+    fragment.appendChild(a);
+  });
+
+  section.append(fragment);
+
+  song.append(section);
+};
+
+const clickTab = (e) => {
+  const active = document.querySelector("#tabs button.active");
+  active.classList.remove("active");
+
+  e.classList.add("active");
+
+  const tabContentActive = document.querySelector(`.tabContent.active`);
+  if (tabContentActive) {
+    tabContentActive.classList.remove("active");
+  }
+
+  const tabContent = document.querySelector(`#${e.id}.tabContent`);
+  if (tabContent) {
+    tabContent.classList.add("active");
+  }
+};
+
+const tabs = () => {
+  const section = document.createElement("section");
+  section.id = "tabs";
+
+  section.innerHTML = `
+    <button id="lyrics" onclick="clickTab(this)" class="active">Lyrics</button>
+    <button id="album" onclick="clickTab(this)">Album</button>
+    <button id="artist" onclick="clickTab(this)">Artist</button>
+  `;
+
   song.append(section);
 };
 
