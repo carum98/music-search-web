@@ -3,7 +3,7 @@ const song = document.querySelector("#song");
 const loading = document.querySelector("#loading");
 const results = document.querySelector("#results");
 
-const apiUrl = "http://localhost:3000";
+const apiUrl = "https://music-api.carum.dev";
 
 const debounce = (func, timeout = 1200) => {
   let timer;
